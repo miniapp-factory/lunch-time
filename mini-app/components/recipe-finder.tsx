@@ -3,13 +3,33 @@ import { useState } from "react";
 
 export default function RecipeFinder() {
   const [ingredients, setIngredients] = useState("");
-  const [recipe, setRecipe] = useState<string | null>(null);
+  const [recipeDetails, setRecipeDetails] = useState<{title:string; ingredients:string[]; instructions:string} | null>(null);
   const [calories, setCalories] = useState<number | null>(null);
 
-  const handleSearch = async (overrideIngredients?: string) => {
-    // Placeholder: replace with real AI call
-    setRecipe(`Recipe for ${overrideIngredients ?? ingredients}`);
-    setCalories(250);
+  const handleSearch = async () => {
+    if (!ingredients.trim()) return;
+    try {
+      const res = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(ingredients)}&number=1&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const recipeId = data.results[0].id;
+        const detailRes = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=true&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
+        const detail = await detailRes.json();
+        setRecipeDetails({
+          title: detail.title,
+          ingredients: detail.extendedIngredients.map((ing: any) => ing.original),
+          instructions: detail.instructions || "No instructions available."
+        });
+        setCalories(detail.nutrition?.calories?.amount ?? null);
+      } else {
+        setRecipeDetails(null);
+        setCalories(null);
+      }
+    } catch (e) {
+      console.error(e);
+      setRecipeDetails(null);
+      setCalories(null);
+    }
   };
 
   return (
@@ -39,10 +59,17 @@ export default function RecipeFinder() {
       >
         Show Pizza
       </button>
-      {recipe && (
+      {recipeDetails && (
         <div className="mt-4">
-          <h3 className="text-xl font-medium">Recipe</h3>
-          <p>{recipe}</p>
+          <h3 className="text-xl font-medium">{recipeDetails.title}</h3>
+          <h4 className="text-lg font-semibold mt-2">Ingredients</h4>
+          <ul className="list-disc list-inside">
+            {recipeDetails.ingredients.map((ing, idx) => (
+              <li key={idx}>{ing}</li>
+            ))}
+          </ul>
+          <h4 className="text-lg font-semibold mt-2">Instructions</h4>
+          <p>{recipeDetails.instructions}</p>
           {calories !== null && <p>Calories per 100g: {calories}</p>}
         </div>
       )}
