@@ -17,7 +17,7 @@ export default function RecipeFinder() {
         const detail = await detailRes.json();
         setRecipeDetails({
           title: detail.title,
-          ingredients: detail.extendedIngredients.map((ing: any) => ing.original),
+          ingredients: detail.extendedIngredients.map((ing: { original: string }) => ing.original),
           instructions: detail.instructions || "No instructions available."
         });
         setCalories(detail.nutrition?.calories?.amount ?? null);
