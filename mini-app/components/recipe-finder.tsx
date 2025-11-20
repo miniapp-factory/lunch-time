@@ -6,9 +6,9 @@ export default function RecipeFinder() {
   const [recipe, setRecipe] = useState<string | null>(null);
   const [calories, setCalories] = useState<number | null>(null);
 
-  const handleSearch = async () => {
+  const handleSearch = async (overrideIngredients?: string) => {
     // Placeholder: replace with real AI call
-    setRecipe(`Recipe for ${ingredients}`);
+    setRecipe(`Recipe for ${overrideIngredients ?? ingredients}`);
     setCalories(250);
   };
 
@@ -26,6 +26,18 @@ export default function RecipeFinder() {
         onClick={handleSearch}
       >
         Search
+      </button>
+      <button
+        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-2"
+        onClick={() => handleSearch("tomato soup")}
+      >
+        Show Tomato Soup
+      </button>
+      <button
+        className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 ml-2"
+        onClick={() => handleSearch("pizza")}
+      >
+        Show Pizza
       </button>
       {recipe && (
         <div className="mt-4">
