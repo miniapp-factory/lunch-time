@@ -11,18 +11,23 @@ export default function RecipeFinder() {
     const query = overrideIngredients ?? ingredients;
     if (!query.trim()) return;
     try {
-      const res = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(query)}&number=1&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
-      const data = await res.json();
-      if (data.results && data.results.length > 0) {
-        const recipeId = data.results[0].id;
-        const detailRes = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=true&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
-        const detail = await detailRes.json();
+      const searchUrl = `https://www.allrecipes.com/search/results/?wt=${encodeURIComponent(query)}&sort=re`;
+      const pageRes = await fetch(searchUrl);
+      const pageText = await pageRes.text();
+      const recipeLinkMatch = pageText.match(/<a href="([^"]+)" class="card__titleLink"/);
+      if (recipeLinkMatch) {
+        const recipeUrl = recipeLinkMatch[1];
+        const recipeRes = await fetch(recipeUrl);
+        const recipeHtml = await recipeRes.text();
+        const titleMatch = recipeHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
+        const ingredientsMatch = [...recipeHtml.matchAll(/<span class="ingredients-item-name">([^<]+)<\/span>/g)];
+        const instructionsMatch = [...recipeHtml.matchAll(/<li class="subcontainer instructions-section-item">.*?<p>([^<]+)<\/p>/gs)];
         setRecipeDetails({
-          title: detail.title,
-          ingredients: detail.extendedIngredients.map((ing: { original: string }) => ing.original),
-          instructions: detail.instructions || "No instructions available."
+          title: titleMatch ? titleMatch[1].trim() : "Unknown",
+          ingredients: ingredientsMatch.map(m => m[1].trim()),
+          instructions: instructionsMatch.map(m => m[1].trim()).join("\n")
         });
-        setCalories(detail.nutrition?.calories?.amount ?? null);
+        setCalories(null);
       } else {
         setRecipeDetails(null);
         setCalories(null);
