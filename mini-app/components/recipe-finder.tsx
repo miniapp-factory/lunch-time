@@ -5,6 +5,7 @@ export default function RecipeFinder() {
   const [ingredients, setIngredients] = useState("");
   const [recipeDetails, setRecipeDetails] = useState<{title:string; ingredients:string[]; instructions:string} | null>(null);
   const [calories, setCalories] = useState<number | null>(null);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const handleSearch = async (overrideIngredients?: string) => {
     const query = overrideIngredients ?? ingredients;
@@ -61,16 +62,10 @@ export default function RecipeFinder() {
         Show Pizza
       </button>
       <button
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-2"
-        onClick={() => handleSearch("tomato soup")}
+        className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 ml-2"
+        onClick={() => setShowReceipt(!showReceipt)}
       >
-        Show Tomato Soup
-      </button>
-      <button
-        className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 ml-2"
-        onClick={() => handleSearch("pizza")}
-      >
-        Show Pizza
+        {showReceipt ? "Hide Receipt" : "Show Receipt"}
       </button>
       {recipeDetails && (
         <div className="mt-4">
@@ -84,6 +79,19 @@ export default function RecipeFinder() {
           <h4 className="text-lg font-semibold mt-2">Instructions</h4>
           <p>{recipeDetails.instructions}</p>
           {calories !== null && <p>Calories per 100g: {calories}</p>}
+        </div>
+      )}
+      {showReceipt && recipeDetails && (
+        <div className="mt-4 p-4 bg-gray-100 rounded">
+          <h3 className="text-lg font-semibold mb-2">Receipt</h3>
+          <p><strong>Ingredients:</strong></p>
+          <ul className="list-disc list-inside mb-2">
+            {recipeDetails.ingredients.map((ing, idx) => (
+              <li key={idx}>{ing}</li>
+            ))}
+          </ul>
+          <p><strong>Instructions:</strong></p>
+          <p>{recipeDetails.instructions}</p>
         </div>
       )}
     </section>
