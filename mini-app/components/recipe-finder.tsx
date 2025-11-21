@@ -1,13 +1,15 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function RecipeFinder() {
   const [ingredients, setIngredients] = useState("");
   const [recipeDetails, setRecipeDetails] = useState<{title:string; ingredients:string[]; instructions:string} | null>(null);
   const [calories, setCalories] = useState<number | null>(null);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async (overrideIngredients?: string) => {
+    setLoading(true);
     const query = overrideIngredients ?? ingredients;
     if (!query.trim()) return;
     try {
@@ -22,12 +24,26 @@ export default function RecipeFinder() {
         const titleMatch = recipeHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
         const ingredientsMatch = [...recipeHtml.matchAll(/<span class="ingredients-item-name">([^<]+)<\/span>/g)];
         const instructionsMatch = [...recipeHtml.matchAll(/<li class="subcontainer instructions-section-item">[\s\S]*?<p>([^<]+)<\/p>/g)];
+        const imageMatch = recipeHtml.match(/<img[^>]+class="rec-photo"[^>]+src="([^"]+)"/);
+        const prepTimeMatch = recipeHtml.match(/<span class="ready-in-time">([^<]+)<\/span>/);
+        const cookTimeMatch = recipeHtml.match(/<span class="cook-time">([^<]+)<\/span>/);
+        const servingsMatch = recipeHtml.match(/<span class="servings">([^<]+)<\/span>/);
+        const ratingMatch = recipeHtml.match(/<span class="review-star-text">([^<]+)<\/span>/);
         setRecipeDetails({
           title: titleMatch ? titleMatch[1].trim() : "Unknown",
           ingredients: ingredientsMatch.map(m => m[1].trim()),
-          instructions: instructionsMatch.map(m => m[1].trim()).join("\n")
+          instructions: instructionsMatch.map(m => m[1].trim()).join("\n"),
+          image: imageMatch ? imageMatch[1] : "",
+          prepTime: prepTimeMatch ? prepTimeMatch[1] : "",
+          cookTime: cookTimeMatch ? cookTimeMatch[1] : "",
+          servings: servingsMatch ? servingsMatch[1] : "",
+          rating: ratingMatch ? ratingMatch[1] : ""
         });
         setCalories(null);
+        // Update history
+        const stored = JSON.parse(localStorage.getItem('recipeHistory') || '[]');
+        const newHistory = [...stored, { title: titleMatch ? titleMatch[1].trim() : "Unknown", url: recipeUrl }].slice(-5);
+        localStorage.setItem('recipeHistory', JSON.stringify(newHistory));
       } else {
         setRecipeDetails(null);
         setCalories(null);
@@ -39,6 +55,13 @@ export default function RecipeFinder() {
     }
   };
 
+  useEffect(() => {
+    const listener = (e: CustomEvent) => {
+      handleSearchByUrl(e.detail.url);
+    };
+    window.addEventListener('loadRecipe', listener as EventListener);
+    return () => window.removeEventListener('loadRecipe', listener as EventListener);
+  }, []);
   return (
     <section className="w-full max-w-2xl mx-auto p-4 bg-white rounded shadow">
       <h2 className="text-2xl font-semibold mb-4">Find a Recipe</h2>
@@ -72,9 +95,11 @@ export default function RecipeFinder() {
       >
         {showReceipt ? "Hide Receipt" : "Show Receipt"}
       </button>
+      {loading && <p>Loading...</p>}
       {recipeDetails && (
         <div className="mt-4">
           <h3 className="text-xl font-medium">{recipeDetails.title}</h3>
+          {recipeDetails.image && <img src={recipeDetails.image} alt={recipeDetails.title} className="w-full h-auto rounded mb-4" />}
           <h4 className="text-lg font-semibold mt-2">Ingredients</h4>
           <ul className="list-disc list-inside">
             {recipeDetails.ingredients.map((ing, idx) => (
@@ -83,6 +108,10 @@ export default function RecipeFinder() {
           </ul>
           <h4 className="text-lg font-semibold mt-2">Instructions</h4>
           <p>{recipeDetails.instructions}</p>
+          {recipeDetails.prepTime && <p>Prep Time: {recipeDetails.prepTime}</p>}
+          {recipeDetails.cookTime && <p>Cook Time: {recipeDetails.cookTime}</p>}
+          {recipeDetails.servings && <p>Servings: {recipeDetails.servings}</p>}
+          {recipeDetails.rating && <p>Rating: {recipeDetails.rating}</p>}
           {calories !== null && <p>Calories per 100g: {calories}</p>}
         </div>
       )}
