@@ -62,3 +62,77 @@
 
 # 2025-11-21 08:22:07.621849
 +As result show recipe for asked produkt. Try to search recipes in Allrecipes.com and copy the first result from this page 
+
+# 2025-11-21 09:16:50.807461
++CORE FEATURES:
++1. Search Bar
++   - Prominent search input field on the main page
++   - Search button to trigger recipe lookup
++   - Real-time search capability
++
++2. Recipe Results Display
++   - Show recipe title and image
++   - Display complete cooking instructions step-by-step
++   - Include ingredients list
++   - Show prep time, cook time, and servings
++   - Display ratings if available
++
++3. Search History
++   - Track and display the 5 most recent recipe searches
++   - Show recipe names as clickable links
++   - Persist history in local storage
++   - Clear history option
++   - When clicking a history item, display that recipe again
++
++TECHNICAL REQUIREMENTS:
++- Use web scraping or API to fetch recipes from AllRecipes.com
++- Implement responsive design (mobile and desktop friendly)
++- Use modern web technologies (React, Vue, or vanilla JavaScript)
++- Store search history in browser's local storage
++- Handle errors gracefully (recipe not found, network issues)
++- Clean and intuitive user interface
++
++UI/UX:
++- Simple, clean design
++- Easy navigation between search and history
++- Loading indicators during recipe fetch
++- Clear visual hierarchy for recipe instructions
++
++
+
+# 2025-11-21 09:16:50.808632
++CORE FEATURES:
++1. Search Bar
++   - Prominent search input field on the main page
++   - Search button to trigger recipe lookup
++   - Real-time search capability
++
++2. Recipe Results Display
++   - Show recipe title and image
++   - Display complete cooking instructions step-by-step
++   - Include ingredients list
++   - Show prep time, cook time, and servings
++   - Display ratings if available
++
++3. Search History
++   - Track and display the 5 most recent recipe searches
++   - Show recipe names as clickable links
++   - Persist history in local storage
++   - Clear history option
++   - When clicking a history item, display that recipe again
++
++TECHNICAL REQUIREMENTS:
++- Use web scraping or API to fetch recipes from AllRecipes.com
++- Implement responsive design (mobile and desktop friendly)
++- Use modern web technologies (React, Vue, or vanilla JavaScript)
++- Store search history in browser's local storage
++- Handle errors gracefully (recipe not found, network issues)
++- Clean and intuitive user interface
++
++UI/UX:
++- Simple, clean design
++- Easy navigation between search and history
++- Loading indicators during recipe fetch
++- Clear visual hierarchy for recipe instructions
++
++
