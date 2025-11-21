@@ -54,6 +54,42 @@ export default function RecipeFinder() {
       setCalories(null);
     }
   };
+  const handleSearchByUrl = async (url: string) => {
+    setLoading(true);
+    try {
+      const recipeRes = await fetch(url);
+      const recipeHtml = await recipeRes.text();
+      const titleMatch = recipeHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
+      const ingredientsMatch = [...recipeHtml.matchAll(/<span class="ingredients-item-name">([^<]+)<\/span>/g)];
+      const instructionsMatch = [...recipeHtml.matchAll(/<li class="subcontainer instructions-section-item">[\s\S]*?<p>([^<]+)<\/p>/g)];
+      const imageMatch = recipeHtml.match(/<img[^>]+class="rec-photo"[^>]+src="([^"]+)"/);
+      const prepTimeMatch = recipeHtml.match(/<span class="ready-in-time">([^<]+)<\/span>/);
+      const cookTimeMatch = recipeHtml.match(/<span class="cook-time">([^<]+)<\/span>/);
+      const servingsMatch = recipeHtml.match(/<span class="servings">([^<]+)<\/span>/);
+      const ratingMatch = recipeHtml.match(/<span class="review-star-text">([^<]+)<\/span>/);
+      setRecipeDetails({
+        title: titleMatch ? titleMatch[1].trim() : "Unknown",
+        ingredients: ingredientsMatch.map(m => m[1].trim()),
+        instructions: instructionsMatch.map(m => m[1].trim()).join("\n"),
+        image: imageMatch ? imageMatch[1] : "",
+        prepTime: prepTimeMatch ? prepTimeMatch[1] : "",
+        cookTime: cookTimeMatch ? cookTimeMatch[1] : "",
+        servings: servingsMatch ? servingsMatch[1] : "",
+        rating: ratingMatch ? ratingMatch[1] : ""
+      });
+      setCalories(null);
+      // Update history
+      const stored = JSON.parse(localStorage.getItem('recipeHistory') || '[]');
+      const newHistory = [...stored, { title: titleMatch ? titleMatch[1].trim() : "Unknown", url }].slice(-5);
+      localStorage.setItem('recipeHistory', JSON.stringify(newHistory));
+    } catch (e) {
+      console.error(e);
+      setRecipeDetails(null);
+      setCalories(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const listener = (e: CustomEvent) => {
