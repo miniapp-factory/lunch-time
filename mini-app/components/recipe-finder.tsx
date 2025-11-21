@@ -21,7 +21,7 @@ export default function RecipeFinder() {
         const recipeHtml = await recipeRes.text();
         const titleMatch = recipeHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
         const ingredientsMatch = [...recipeHtml.matchAll(/<span class="ingredients-item-name">([^<]+)<\/span>/g)];
-        const instructionsMatch = [...recipeHtml.matchAll(/<li class="subcontainer instructions-section-item">.*?<p>([^<]+)<\/p>/gs)];
+        const instructionsMatch = [...recipeHtml.matchAll(/<li class="subcontainer instructions-section-item">[\s\S]*?<p>([^<]+)<\/p>/g)];
         setRecipeDetails({
           title: titleMatch ? titleMatch[1].trim() : "Unknown",
           ingredients: ingredientsMatch.map(m => m[1].trim()),
