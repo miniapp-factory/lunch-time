@@ -6,10 +6,11 @@ export default function RecipeFinder() {
   const [recipeDetails, setRecipeDetails] = useState<{title:string; ingredients:string[]; instructions:string} | null>(null);
   const [calories, setCalories] = useState<number | null>(null);
 
-  const handleSearch = async () => {
-    if (!ingredients.trim()) return;
+  const handleSearch = async (overrideIngredients?: string) => {
+    const query = overrideIngredients ?? ingredients;
+    if (!query.trim()) return;
     try {
-      const res = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(ingredients)}&number=1&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
+      const res = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(query)}&number=1&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
       const data = await res.json();
       if (data.results && data.results.length > 0) {
         const recipeId = data.results[0].id;
@@ -46,6 +47,18 @@ export default function RecipeFinder() {
         onClick={() => handleSearch()}
       >
         Search
+      </button>
+      <button
+        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-2"
+        onClick={() => handleSearch("tomato soup")}
+      >
+        Show Tomato Soup
+      </button>
+      <button
+        className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 ml-2"
+        onClick={() => handleSearch("pizza")}
+      >
+        Show Pizza
       </button>
       <button
         className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ml-2"
