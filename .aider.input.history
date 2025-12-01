@@ -216,3 +216,87 @@
 
 # 2025-11-21 09:40:07.305326
 +apply changes
+
+# 2025-12-01 22:05:17.235202
++
++
++Create the core logic for a mini app called “What can I cook with what I have?”.  
++
++Assumptions:
++
++1. The user selects which ingredients they currently have at home (a list of food items).  
++2. The app has a local database of simple, everyday recipes. Each recipe contains:  
++   - dish name  
++   - list of ingredients (with quantities and units)  
++   - short preparation description (maximum 5 steps)  
++   - estimated cooking time  
++   - difficulty level (easy/medium)  
++3. Based on the user’s ingredient list, choose recipes that:  
++   - can be made 100% with the available ingredients,  
++   - or need at most 1 missing ingredient (then clearly list that ingredient).  
++
++Your tasks:  
++- Propose a data structure (for example JSON) for a single recipe and for the user’s ingredient list.  
++- Based on an example user ingredient list, generate 10 sample recipes using this structure.  
++- Write an algorithm (in pseudocode or simple JavaScript/TypeScript) that:  
++  1) takes the user ingredient list and the recipe list as input,  
++  2) returns two lists:  
++     - “Recipes with all ingredients”,  
++     - “Recipes with one missing ingredient” (with the missing ingredient included in the result).  
++
++Answer concisely, without explanations outside of the code and data structures – first show the data structures, then the sample data, and finally the algorithm.
++
++Citat:
++[1] Database structure for recipe app : r/learnprogramming https://www.reddit.com/r/learnprogramming/comments/c38m2c/database_structure_for_recipe_app/
++[2] Designing a Relational Database for a Cookbook https://dev.to/amckean12/designing-a-relational-database-for-a-cookbook-4nj6
++[3] Food Recipe App Structure and Schema Diagram https://databasesample.com/database/food-recipe-app
++[4] Easy Meal Planning in Notion - Complete Recipe ... https://www.frugalandthriving.com.au/meal-planning-in-notion/
++[5] Recipe App: Database design https://www.reddit.com/r/SQL/comments/xy74h1/recipe_app_database_design/
++[6] Paprika Recipe Manager for iOS, Mac, Android, and Windows https://www.paprikaapp.com
++[7] Recipe Keeper App for iPhone, iPad, Android, Windows and ... https://recipekeeperonline.com
++[8] CookBook - The Recipe Manager & Planner App https://cookbookmanager.com
++[9] RecipeSage https://recipesage.com
++[10] Plan to Eat: Meal Planner, Recipe Organizer, and Automatic ... https://www.plantoeat.com
++
+
+# 2025-12-01 22:05:17.235520
++
++
++Create the core logic for a mini app called “What can I cook with what I have?”.  
++
++Assumptions:
++
++1. The user selects which ingredients they currently have at home (a list of food items).  
++2. The app has a local database of simple, everyday recipes. Each recipe contains:  
++   - dish name  
++   - list of ingredients (with quantities and units)  
++   - short preparation description (maximum 5 steps)  
++   - estimated cooking time  
++   - difficulty level (easy/medium)  
++3. Based on the user’s ingredient list, choose recipes that:  
++   - can be made 100% with the available ingredients,  
++   - or need at most 1 missing ingredient (then clearly list that ingredient).  
++
++Your tasks:  
++- Propose a data structure (for example JSON) for a single recipe and for the user’s ingredient list.  
++- Based on an example user ingredient list, generate 10 sample recipes using this structure.  
++- Write an algorithm (in pseudocode or simple JavaScript/TypeScript) that:  
++  1) takes the user ingredient list and the recipe list as input,  
++  2) returns two lists:  
++     - “Recipes with all ingredients”,  
++     - “Recipes with one missing ingredient” (with the missing ingredient included in the result).  
++
++Answer concisely, without explanations outside of the code and data structures – first show the data structures, then the sample data, and finally the algorithm.
++
++Citat:
++[1] Database structure for recipe app : r/learnprogramming https://www.reddit.com/r/learnprogramming/comments/c38m2c/database_structure_for_recipe_app/
++[2] Designing a Relational Database for a Cookbook https://dev.to/amckean12/designing-a-relational-database-for-a-cookbook-4nj6
++[3] Food Recipe App Structure and Schema Diagram https://databasesample.com/database/food-recipe-app
++[4] Easy Meal Planning in Notion - Complete Recipe ... https://www.frugalandthriving.com.au/meal-planning-in-notion/
++[5] Recipe App: Database design https://www.reddit.com/r/SQL/comments/xy74h1/recipe_app_database_design/
++[6] Paprika Recipe Manager for iOS, Mac, Android, and Windows https://www.paprikaapp.com
++[7] Recipe Keeper App for iPhone, iPad, Android, Windows and ... https://recipekeeperonline.com
++[8] CookBook - The Recipe Manager & Planner App https://cookbookmanager.com
++[9] RecipeSage https://recipesage.com
++[10] Plan to Eat: Meal Planner, Recipe Organizer, and Automatic ... https://www.plantoeat.com
++
