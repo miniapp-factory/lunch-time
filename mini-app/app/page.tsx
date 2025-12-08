@@ -3,6 +3,7 @@ import { generateMetadata } from "@/lib/farcaster-embed";
 import RecipeFinder from "@/components/recipe-finder";
 import History from "@/components/history";
 import PdfExport from "@/components/pdf-export";
+import RecipeList from "@/components/recipe-list";
 
 export { generateMetadata };
 
@@ -14,6 +15,7 @@ export default function Home() {
       <RecipeFinder />
       <History />
       <PdfExport />
+      <RecipeList />
     </main>
   );
 }
